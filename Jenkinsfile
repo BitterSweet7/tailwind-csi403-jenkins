@@ -6,7 +6,8 @@ pipeline {
             steps {
                 script {
                     echo 'Building project...'
-                    sh 'npm run build'
+                    sh '/usr/local/bin/docker build -t csi403-image .'
+                    sh '/usr/local/bin/docker run --name csi403-image-run -p 54100:3000 csi403-image'
                 }
             }
         }
@@ -15,15 +16,6 @@ pipeline {
                 script {
                     echo 'Running tests...'
                     sh 'npm test'
-                }
-            }
-        }
-        stage('Deploy') {
-            steps {
-                script {
-                    echo 'Deploying project...'
-                    sh 'docker build -t my-tailwind-frontend .'
-                    sh 'docker run -p 8080:80 my-tailwind-frontend'
                 }
             }
         }
