@@ -2,6 +2,19 @@ pipeline {
     agent any
 
     stages {
+        stage('Dasg') {
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[
+                        credentialsId: '',
+                        url: 'https://github.com/BitterSweet7/tailwind-csi403-jenkins.git'
+                    ]]
+                ])
+            }
+            print "Checkout success"
+        }
         stage('Build') {
             steps {
                 script {
