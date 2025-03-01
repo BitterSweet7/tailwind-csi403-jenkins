@@ -12,7 +12,7 @@ pipeline {
                     $class: 'GitSCM',
                     branches: [[name: '*/main']],
                     userRemoteConfigs: [[
-                        credentialsId: 'fortesting1', // Replace with actual credentialsId
+                        credentialsId: '7b8a8548-fec8-4a17-9334-1c84556d634b', // Replace with actual credentialsId
                         url: 'https://github.com/BitterSweet7/tailwind-csi403-jenkins.git'
                     ]]
                 ])
