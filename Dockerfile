@@ -1,4 +1,4 @@
-# Use an official Node.js image to build the Tailwind CSS first
+# Step 1: Use an official Node.js image to build the Tailwind CSS first
 FROM node:16-alpine AS build
 
 # Set the working directory
@@ -16,7 +16,7 @@ COPY . .
 # Build the Tailwind CSS
 RUN npm run build
 
-# Now use an official Nginx image to serve static files
+# Step 2: Use an official Nginx image to serve static files
 FROM nginx:alpine
 
 # Set the working directory inside the container
@@ -25,9 +25,11 @@ WORKDIR /usr/share/nginx/html
 # Copy the built files (including final CSS) from the build container
 COPY --from=build /app/css /usr/share/nginx/html/css
 COPY --from=build /app/index.html /usr/share/nginx/html/index.html
+COPY --from=build /app/js /usr/share/nginx/html/js
+COPY --from=build /app/img /usr/share/nginx/html/img
 
 # Expose the port that Nginx will use
-EXPOSE 80
+EXPOSE 52700:80
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
