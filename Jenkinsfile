@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         LOCAL_REGISTRY = 'localhost:5000'
+        PATH = "/usr/local/bin:$PATH"
     }
     stages {
         stage('Checkout') {
