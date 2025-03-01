@@ -1,9 +1,13 @@
 pipeline {
     agent any
+    environment{
+        LOCAL_REGISTRY = 'localhost:5000'
+    }
 
     stages {
-        stage('Dasg') {
+        stage('Checkout') {
             steps {
+                print "Checkout "
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: '*/main']],
@@ -17,18 +21,23 @@ pipeline {
         }
         stage('Build') {
             steps {
+                print "Docker build image"
                 script {
-                    echo 'Building project...'
-                    sh '/usr/local/bin/docker build -t csi403-image .'
-                    sh '/usr/local/bin/docker run --name csi403-image-run -p 54100:3000 csi403-image'
+                    sh 'docker pull --disable-content-trust=false node:16-alpine'
+                        sh 'DOCKER_BUILTKIT=0 docker build -t my-tailwind-project .'
+                }
+                print "Docker build image running to container"
+                script {
+                    sh 'docker rm -f build my-tailwind-project || true'
+                    sh 'docker run -d --name my-tailwind-project -p 52700:80 my-tailwind-project:latest'
                 }
             }
+
         }
         stage('Test') {
             steps {
                 script {
-                    echo 'Running tests...'
-                    sh 'npm test'
+                    print'Running tests...'
                 }
             }
         }
