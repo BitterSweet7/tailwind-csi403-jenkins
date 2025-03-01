@@ -23,13 +23,14 @@ pipeline {
             steps {
                 print "Docker build image"
                 script {
-                    sh 'docker pull --disable-content-trust=false node:16-alpine'
-                        sh 'DOCKER_BUILTKIT=0 docker build -t my-tailwind-project .'
+                        bat "docker build -t my-tailwind-project ."
+                        print "Docker build image success"
                 }
                 print "Docker build image running to container"
                 script {
-                    sh 'docker rm -f build my-tailwind-project || true'
-                    sh 'docker run -d --name my-tailwind-project -p 52700:80 my-tailwind-project:latest'
+                    bat 'docker rm -f build my-tailwind-project || true'
+                    bat 'docker run -d --name my-tailwind-project -p 52700:80 my-tailwind-project:latest'
+                    print "Docker build image running to container success"
                 }
             }
 
