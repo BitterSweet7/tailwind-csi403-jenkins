@@ -24,7 +24,7 @@ pipeline {
             steps {
                 echo "Docker build image"
                 script {
-                    sh "docker build --no-cache -t my-tailwind-project ."
+                    sh "docker build -t my-tailwind-project ."
                     echo "Docker build image success"
                 }
                 echo "Docker build image running to container"
