@@ -28,8 +28,8 @@ COPY --from=build /app/index.html /usr/share/nginx/html/index.html
 COPY --from=build /app/js /usr/share/nginx/html/js
 COPY --from=build /app/img /usr/share/nginx/html/img
 
-# Expose the port that Nginx will use
-EXPOSE 52700:80
+# Expose port 80 (Nginx default port)
+EXPOSE 80
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
