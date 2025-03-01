@@ -1,35 +1,23 @@
-# Step 1: Use an official Node.js image to build the Tailwind CSS first
-FROM node:16-alpine AS build
+# Step 1: Use an official Node.js image as the base
+FROM node:16-alpine
 
-# Set the working directory
+# Step 2: Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json first to install dependencies
-COPY package.json package-lock.json ./
+# Step 3: Copy the package.json and package-lock.json (if available)
+COPY package*.json ./
 
-# Install dependencies (including tailwindcss)
+# Step 4: Install dependencies (including Tailwind CSS)
 RUN npm install
 
-# Copy the rest of the source files to the container
+# Step 5: Copy the rest of your application code
 COPY . .
 
-# Build the Tailwind CSS
+# Step 6: Run the build command
 RUN npm run build
 
-# Step 2: Use an official Nginx image to serve static files
-FROM nginx:alpine
+# Step 7: Expose the port that your application will run on (if applicable)
+EXPOSE 3000 
 
-# Set the working directory inside the container
-WORKDIR /usr/share/nginx/html
-
-# Copy the built files (including final CSS) from the build container
-COPY --from=build /app/css /usr/share/nginx/html/css
-COPY --from=build /app/index.html /usr/share/nginx/html/index.html
-COPY --from=build /app/js /usr/share/nginx/html/js
-COPY --from=build /app/img /usr/share/nginx/html/img
-
-# Expose port 80 (Nginx default port)
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Step 8: Specify the command to run when the container starts
+CMD ["npm", "run", "watch"]  # or "npm run dev" if you're starting a dev server

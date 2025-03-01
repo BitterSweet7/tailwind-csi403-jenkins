@@ -3,7 +3,6 @@ pipeline {
     environment {
         LOCAL_REGISTRY = 'localhost:5000'
     }
-
     stages {
         stage('Checkout') {
             steps {
@@ -20,18 +19,24 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                echo "Docker build image"
+                echo "Building Docker image"
                 script {
-                    sh "docker build -t my-tailwind-project ."
+                    // Build the Docker image
+                    sh 'docker build --no-cache -t my-tailwind-project .'
                     echo "Docker build image success"
                 }
-                echo "Docker build image running to container"
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                echo "Running Docker container"
                 script {
-                    sh 'docker rm -f my-tailwind-project || true'
-                    sh 'docker run -d --name my-tailwind-project -p 52700:80 my-tailwind-project:latest'
-                    echo "Docker build image running to container success"
+                    // Run the container from the built image
+                    sh 'docker run -d --name my-tailwind-project -p 52700:80 my-tailwind-project'
+                    echo "Docker container running"
                 }
             }
         }
@@ -40,6 +45,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running tests...'
+                    // Insert your test commands here if needed
                 }
             }
         }
